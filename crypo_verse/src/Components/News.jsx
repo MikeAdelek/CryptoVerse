@@ -11,7 +11,7 @@ const { Option } = Select;
 const demoImage =
   "https://www.bing.com/th?id=OVFT.mpzuVZnv8dwIMRfQGPbOPC&pid=News";
 const News = ({ simplified }) => {
-  const [newsCategory, setNewsCategory] = useState("Cryptocurrency");
+  const [newsCategory, setNewsCategory] = useState("Business");
 
   const {
     data: cryptoNews,
@@ -22,7 +22,7 @@ const News = ({ simplified }) => {
     count: simplified ? 6 : 12
   });
 
-  const { data: cryptosList } = useGetCryptosQuery(100);
+  const { data } = useGetCryptosQuery(100);
 
   if (error) {
     return (
@@ -56,7 +56,7 @@ const News = ({ simplified }) => {
             value={newsCategory}
           >
             <Option value="Cryptocurrency">Cryptocurrency</Option>
-            {cryptosList?.data?.coins?.map((coin) => (
+            {data?.coins.map((coin) => (
               <Option value={coin.name} key={coin.uuid}>
                 {coin.name}
               </Option>
@@ -89,17 +89,13 @@ const News = ({ simplified }) => {
                   }}
                 />
               </div>
-              <p>
-                {news.description?.length > 100
-                  ? `${news.description.substring(0, 100)}...`
-                  : news.description}
-              </p>
+              <p>{news.description || "No description available"}</p>
               <div className="provider-container">
                 <div>
-                  <Avatar src={demoImage} alt={news.source?.name} />
+                  <Avatar src={news.source?.favicon || demoImage} alt="news" />
                   <Text className="provider-name">{news.source?.name}</Text>
                 </div>
-                <Text>{moment(news.publishedAt).fromNow()}</Text>
+                <Text>{moment(news.publishedAt).startOf("ss").fromNow()}</Text>
               </div>
             </a>
           </Card>

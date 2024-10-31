@@ -8,10 +8,7 @@ export const cryptoApi = createApi({
     baseUrl,
     prepareHeaders: (headers) => {
       headers.set("X-RapidAPI-Key", import.meta.env.VITE_CRYPTO_RAPIDAPI_KEY);
-      headers.set(
-        "X-RapidAPI-Host",
-        import.meta.env.VITE_CRYPTO_RAPIDAPI_HOST
-      );
+      headers.set("X-RapidAPI-Host", import.meta.env.VITE_CRYPTO_RAPIDAPI_HOST);
       return headers;
     }
   }),

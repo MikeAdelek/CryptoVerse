@@ -15,7 +15,7 @@ export const cryptoNewsApi = createApi({
 
   endpoints: (builder) => ({
     getCryptoNews: builder.query({
-      query: ({ query = "cryptocurrency", count = 10 }) => ({
+      query: ({ query = "business", count = 10 }) => ({
         url: "/v2/trendings",
         params: {
           topic: query,
@@ -24,8 +24,6 @@ export const cryptoNewsApi = createApi({
         }
       }),
       transformResponse: (response) => {
-        console.log("Raw API Response:", response);
-
         if (!response || !response.success) {
           console.error("Invalid response received:", response);
           return [];
@@ -40,12 +38,13 @@ export const cryptoNewsApi = createApi({
             article.description ||
             article.content ||
             "No description available",
-          url: article.link || "#",
+          url: article.link || article.url || "#",
           urlToImage: article.image || article.thumbnail,
           publishedAt: article.published_at || article.date,
           source: {
-            name: article.source || "Unknown Source",
-            image: null
+            name: article.source?.name || article.source || "Unknown Source",
+            favicon: article.source?.favicon || article.source?.image || null,
+            image: article.source?.url || "#"
           }
         }));
       },
